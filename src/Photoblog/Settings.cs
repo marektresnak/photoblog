@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Photoblog.Entities;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Photoblog {
@@ -23,14 +24,6 @@ namespace Photoblog {
         public string DataFilePath => Path.Combine(WorkingDirectory, "entries.data");
 
         public string LoggingDirectory => Path.Combine(WorkingDirectory, "logs");
-
-    }
-
-    public class AppUser {
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
 
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Photoblog.Entities;
 using Photoblog.Utils.Extensions;
 using System;
 using System.IdentityModel.Tokens.Jwt;
