@@ -9,7 +9,6 @@ namespace Photoblog.Utils.Extensions {
                 formFile.CopyTo(ms);
                 return ms.ToArray();
             }
-
         }
 
     }

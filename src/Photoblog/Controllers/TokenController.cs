@@ -25,6 +25,19 @@ namespace Photoblog.Controllers {
         [HttpPost("/api/token")]
         [AllowAnonymous]
         public IActionResult GetToken(string userName, string password) {
+            var user = GetAuthenticatedUser(userName, password);
+
+            if (user == null) {
+                _logger.LogInformation("Unauthorized attempt to generate access token with username [{username}]", userName);
+                return Unauthorized();
+            }
+
+            return new ObjectResult(new {
+                Token = GenerateToken(user)
+            });
+        }
+
+        AppUser GetAuthenticatedUser(string userName, string password) {
             var user = _settings.Users.FirstOrDefault(u => u.UserName == userName);
             var passwordHasher = new PasswordHasher<AppUser>();
 
@@ -36,13 +49,10 @@ namespace Photoblog.Controllers {
                     _logger.LogInformation("Passsword for user [{username}] needs to be re-hashed", userName);
                 }
 
-                return new ObjectResult(new {
-                    Token = GenerateToken(user)
-                });
+                return user;
             }
 
-            _logger.LogInformation("Unauthorized attempt to generate access token with username [{username}]", userName);
-            return Unauthorized();
+            return null;
         }
 
         string GenerateToken(AppUser user) {

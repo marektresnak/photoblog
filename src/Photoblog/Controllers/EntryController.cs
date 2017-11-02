@@ -46,7 +46,15 @@ namespace Photoblog.Controllers {
                 return BadRequest(ModelState);
             }
 
-            var newEntry = new NewEntryDto {
+            var newEntry = GetNewEntryDto(entryForm);
+
+            // Create a new entry and return it to the caller
+            return new ObjectResult(
+                _dataStore.AddEntry(newEntry));
+        }
+
+        NewEntryDto GetNewEntryDto(CreateEntryForm entryForm) {
+            return new NewEntryDto {
                 Label = entryForm.Label,
                 Date = entryForm.Date,
                 Tags = TagHelper.ExtractFromText(entryForm.Label),
@@ -55,10 +63,6 @@ namespace Photoblog.Controllers {
                         new NewEntryImageDto(p.GetBytes(), Path.GetExtension(p.FileName)))
                     .ToList()
             };
-
-            // Create a new entry and return it to the caller
-            return new ObjectResult(
-                _dataStore.AddEntry(newEntry));
         }
 
     }
