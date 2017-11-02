@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Photoblog.Entities;
 using Photoblog.Exceptions;
+using Photoblog.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,7 @@ namespace Photoblog.Data {
 
             if (filter != null) {
                 allEntries = allEntries
-                    .Where(e => EntryMatchesFilter(e, filter));
+                    .Where(e => e.MatchesFilter(filter));
             }
 
             allEntries = allEntries.Skip(skip);
@@ -109,20 +110,6 @@ namespace Photoblog.Data {
             return allEntries.Count > 0
                 ? allEntries.Max(e => e.Id) + 1
                 : 1;
-        }
-
-        bool EntryMatchesFilter(Entry entry, EntryFilter filter) {
-            // Ignore all filter properties that don't have a value
-
-            if (filter.Year != null && entry.Date.Year != filter.Year) {
-                return false;
-            }
-
-            if (filter.Tags.Count > 0 && !entry.Tags.Any(t => filter.Tags.Contains(t))) {
-                return false;
-            }
-
-            return true;
         }
 
         string GetEntryImagePath(string imageName) {
